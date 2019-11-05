@@ -19,9 +19,7 @@ namespace StudentManagement
         public string LastName { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
-
-        [DisplayFormat(DataFormatString = "{0:dd/MMM/yyyy}", ApplyFormatInEditMode = true)]
+       
         public String DateOfBirth { get; set; }
         [StringLength(2000)]
         public String Address { get; set; }
@@ -33,9 +31,6 @@ namespace StudentManagement
         public String SCourse { get; set; }
         [Required]
 
-        [DataType(DataType.Date)]
-
-        [DisplayFormat(DataFormatString = "{0:dd/MMM/yyyy}",ApplyFormatInEditMode=true)]
         public String EnrolmentDate { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -16,11 +17,15 @@ namespace StudentManagement.Controllers
         private static List<Courses> _courses =new List<Courses>();
         private static List<Student> _students = new List<Student>();
 
+        public DateTimeStyles DataTimeStyle { get; private set; }
+        public object DataTimeStyles { get; private set; }
+
         //post Api for Students
         [HttpPost("api/Students")]
         public  IActionResult AddStudent(Student student)
         {
             bool flag = false;
+            DateTime date1, date2;
             var LastStudent = _students.OrderByDescending(x => x.Sid).FirstOrDefault();
             int id = LastStudent == null ? 1 : LastStudent.Sid + 1;
             foreach (var course in _courses)
@@ -35,7 +40,15 @@ namespace StudentManagement.Controllers
             {
                 return Conflict("Course is not in the list");
             }
-            if(Convert.ToDateTime(student.DateOfBirth)>DateTime.Now)
+            if (DateTime.TryParseExact(student.DateOfBirth, new[] { "dd-MMM-yyyy" }, null, DateTimeStyles.None, out date1))
+                String.Format("{0:dd-mmm-yyy}", date1);
+            else
+                return Conflict();
+            if (DateTime.TryParseExact(student.EnrolmentDate, new[] { "dd-MMM-yyyy" }, null, DateTimeStyles.None, out date2))
+                String.Format("{0:dd-mmm-yyy}", date2);
+            else
+                return Conflict();
+            if (Convert.ToDateTime(student.DateOfBirth)>DateTime.Now)
             {
                 return Conflict("enter a valid Date");
             }
